@@ -320,7 +320,7 @@ g <- function(x,y=2,z=T) {...}
 # If formal parameters 'y' and 'z' are not called
 # in the function call for g(), ie g(6), then x=6
 # Then y defaults to 2 and z defaults to 'TRUE'
-
+#
 # what about g(12,z=FALSE)?
 # x takes on value of 12
 # y takes on default value of 2
