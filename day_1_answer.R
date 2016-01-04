@@ -12,3 +12,14 @@ T.test <- function(y1, y2) {
   t <- (t_top / t_bottom)
   return(t)
 }
+
+male <- rnorm(1000,0,100)
+hist(male)
+summary(male)
+
+female <- rnorm(1000,10,100)
+hist(female)
+summary(female)
+
+tstat <- T.test(female,male); tstat
+tst <- t.test(female,male);tst
