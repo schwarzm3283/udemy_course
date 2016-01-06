@@ -116,12 +116,12 @@ sum.squares4(3:10,5)
 # elements of the vector. Test it.
 
 sum.squares5 <- function(x,y=2) {
-        s <- 0 
+        s <- 1:length(x) 
         for (i in 1:length(x)) {
-                s <- s + x[i]^y
+                s[i] <- x[i]^y
                 print(x[i]^y)
         }
-        return(s)
+        cat("Total sum is", (sum(s)))
 }
 
 sum.squares5(3:10,5)
