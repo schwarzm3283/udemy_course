@@ -16,3 +16,36 @@
 # the roll of two (fair) dice:
 
 # x <- sum(ceiling(6*runif(2)))
+
+play <- function() {
+start.point <- sum(ceiling(6*runif(2)))
+cat(start.point)
+
+if (start.point %in% c(7,11)){
+  cat("Start point is ", start.point, "you won\n")
+}
+
+curr.roll <- function() {
+  x <- sum(ceiling(6*runif(2)))
+  return(x)
+}
+
+x <- curr.roll()
+while(!(x %in% c(start.point, 7))){
+  x <- curr.roll()
+}
+  
+if (x == start.point) {
+  cat("roll is ",x," you won\n")
+}
+if(x == 7) {
+  cat("roll is ", x," you lost\n")
+}
+}
+
+  
+  
+
+
+
+
