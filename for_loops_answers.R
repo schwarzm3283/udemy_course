@@ -41,3 +41,32 @@ merg.vec <- function(v1,v2) {
 }
 
 ##for loop thrid answer
+play <- function() {
+  start.point <- sum(ceiling(6*runif(2)))
+  
+  if (start.point %in% c(7,11)){
+    cat("come out roll is" ,start.point,"\n")
+    stop("you won!")
+  }
+  cat("come out roll is" ,start.point," \n")
+  curr.roll <- function() {
+    x <- sum(ceiling(6*runif(2)))
+    return(x)
+  }
+  
+  x <- curr.roll()
+  while(!(x %in% c(start.point, 7))){
+    cat("roll is ", x, " roll again\n")
+    x <- curr.roll()
+  }
+  
+  if (x == start.point) {
+    cat("roll is ",x," you won\n")
+  }
+  else if(x == 7) {
+    cat("roll is ", x," you lost\n")
+  }
+  else {
+    cat("WTF\n")
+  }
+}
