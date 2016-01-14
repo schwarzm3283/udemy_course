@@ -17,6 +17,22 @@
 ## should be RANDOM NUMBER between 5 and 10.
 ## (Not exactly five elements like last time).
 
+vector.maker <- function(len=sample(5:10,1)) {
+  if (!(len %in% 5:10)) stop(paste(("Error")))
+  x <- sample(1:3,1)
+      if (x==1){
+        rand.num <- sample(1:10,len, replace=FALSE)
+        return(rand.num)
+      }
+      else if (x==2) {
+        rand.alph <- sample(letters,len, replace=FALSE)
+        return(rand.alph)
+      }
+      else {
+        rand.bool <- sample(c(TRUE, FALSE),len, replace=TRUE)
+        return(rand.bool)
+      }
+  }
 #############  MATRIX MAKER  ##################
 ## Create a function matrix.maker(row,col)
 ## matrix.maker(row, col) generates a numeric matrix.
@@ -29,30 +45,9 @@
 ## NOTE: Is OK to use matrix() function INSIDE your
 ## user-defined matrix.maker() function
 
-#######  CAN USE THESE SIMPLE VECTOR MAKERS  #########
-# clear out workspace
-rm(list=ls())
-
-vector.maker.num <- function() {
-  sample(1:10,5)
+matrix.maker <- function(row=sample(5:10,1), col=sample(5:10,1)) {
+  x <- (row * col)
+  y <- sample(1:100,x, replace = TRUE)
+  rand.matrix <- matrix(y, nrow = row, ncol = col)
+  return(rand.matrix)
 }
-
-vector.maker.num()
-
-# Create a user-defined function "vector.maker.alph()"
-
-vector.maker.alph <- function() {
-  sample(letters,5)
-}
-
-vector.maker.alph()
-
-# Create a user-defined function "vector.maker.bool()" 
-# that generates a vector of logical values (T's 
-# and F's). 
-
-vector.maker.bool <- function() {
-  sample(c(rep(T,5),rep(F,5)),5)
-}
-
-vector.maker.bool()
