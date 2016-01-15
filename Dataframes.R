@@ -10,17 +10,19 @@ d # matrix-like viewpoint
 # 1 Jack   12
 # 2 Jill   10
 
+d$kids # is still a string (character) vector
+str(d)
 ## Accessing Data Frames
 d[[1]]
 d$kids
 
 d[,1]
-getwd()
-str(d)
 
 ## Example: Exam Grades
 
 # make sure directory is set to c:\temp
+setwd("c://temp")
+file.exists("exams.txt")
 
 # "exams.txt" looks like:
 # "Exam 1" "Exam 2" Quiz
@@ -49,7 +51,8 @@ class(examsquiz[2:5,2])
 typeof(examsquiz[2:5,2])
 mode(examsquiz[2:5,2])
 
-examsquiz[2:5,2,drop=FALSE]
+examsquiz[2:5,2,drop=FALSE] # in matrix case
+# keeps it as one-column dataframe
 
 class(examsquiz[2:5,2,drop=FALSE])
 typeof(examsquiz[2:5,2,drop=FALSE])
@@ -83,6 +86,8 @@ typeof(states)
 mode(states)
 class(states)
 
+# must have equal sizes
+# to use cbind() with dataframes
 d4 <- data.frame(cbind(kids,states))
 d4
 
@@ -97,30 +102,47 @@ typeof(d5)
 
 d
 
+# added row with rbind() usually in the form
+# of a dataframe or list
 rbind(d,list("Laura",19))
 
+# can create new columns from old ones
 eq <- cbind(examsquiz,examsquiz$Exam.2-examsquiz$Exam.1)
 class(eq)
 # [1] "data.frame"
 head(eq)
 
+# easier way (neater)
 examsquiz$ExamDiff <- examsquiz$Exam.2 - examsquiz$Exam.1
 head(examsquiz)
+# technically we added a new component
+# to an already existing list
 
 d
 
+# here we exploit recycling to add 
+# a column that is a different length
+# than rest of dataframe
 d$one <- 1
 d
 
 ### Using the apply() function
 
+# can use apply on dfs if
+# columns all of same type.
+# maximum grade for each student:
 apply(examsquiz,1,max)
 
 ## EXTENDED STUDY: A SALARY STUDY
 file.exists("c://temp/2006.csv")
-all2006 <- read.csv("c://temp/2006.csv",header=TRUE,as.is=TRUE)
+all2006 <- read.csv("c://temp/2006.csv",
+                    header=TRUE,
+                    # negates stringsAsFactors
+                    as.is=TRUE)
 all2006
+str(all2006)
 
+# do some filtering to clean up
 # exclude hourly-wagers
 all2006 <- all2006[all2006$Wage_Per=="Year",]
 # exclude weird cases
@@ -129,31 +151,55 @@ all2006 <- all2006[all2006$Wage_Offered_From > 20000,]
 all2006 <- all2006[all2006$Prevailing_Wage_Amount > 200,]
 all2006
 
+# new column for ratio between actual wage
+# and prevailing wage:
 all2006$rat <- all2006$Wage_Offered_From / all2006$Prevailing_Wage_Amount
 
+# function to calculate median in new
+# column for many subsets. Need to exclude
+# NAs which are common in government data
 medrat <- function(dataframe) {
   return(median(dataframe$rat,na.rm=TRUE))
 }
 
+# interested in three occupations so extract
+# subset dataframes for them
+# 'grep()' searches for the rows which
+# contain the string occupation of interest
 se2006 <- all2006[grep("Software Engineer",all2006),]
 prg2006 <- all2006[grep("Programmer",all2006),]
 ee2006 <- all2006[grep("Electronics Engineer",all2006),]
 
+# also want analysis by firm so we 
+# write a function
 makecorp <- function(corpname) {
   t <- all2006[all2006$Employer_Name == corpname,]
   return(t)
 }
 
+# create subdataframes for a number
+# of firms
 corplist <- c("MICROSOFT CORPORATION","ms","INTEL CORPORATION","intel","
 SUN MICROSYSTEMS, INC.","sun","GOOGLE INC.","google")
+corplist
 for (i in 1:(length(corplist)/2)) {
   corp <- corplist[2*i-1]
+  # creating variable names from char strings
+  # paste() concatenates with no separators
   newdtf <- paste(corplist[2*i],"2006",sep="")
+  # want them at global level
+  # assign() facilitates creating var names from strings
   assign(newdtf,makecorp(corp),pos=.GlobalEnv)
 }
 
+corp # only last one
+newdtf # only last one
+
 ### Merging Dataframes
 
+# simplest form
+# assumes two data frames have one
+# or more column names in common
 # merge(x,y)
 
 kids
@@ -167,20 +213,25 @@ d1 <- data.frame(cbind(kids,states))
 d1
 
 
-d2 <- data.frame(cbind(ages=c(10,7,12),kids=c("Jill","Lillian","Jack")))
+d2 <- data.frame(cbind(ages=c(10,7,12),
+                       kids=c("Jill","Lillian","Jack")))
 d2
 
+# two dataframes share column name "kids"
 d <- merge(d1,d2)
 d
 
-d3 <- data.frame(cbind(ages=c(12,10,7),pals=c("Jack","Jill","Lillian")))
+d3 <- data.frame(cbind(ages=c(12,10,7),
+                       pals=c("Jack","Jill","Lillian")))
 d3
 
+# synonyms "kids" and "pals"
 merge(d1,d3,by.x="kids",by.y="pals")
 
 ### Using lapply() and sapply() on Data Frames
 
-d <- data.frame(cbind(kids=c("Jack","Jill"),ages=c(12,10)))
+d <- data.frame(cbind(kids=c("Jack","Jill"),
+                      ages=c(12,10)))
 d
 d1 <- lapply(d,sort)
 d1
@@ -261,11 +312,13 @@ ufc[1:5,5]
 # notation [?]. We can also use names in
 # this situation. These two are equivalent:
 
+# extract columns 4 and 5
 head(ufc[4:5])
 head(ufc[c("dbh.cm","height.m")])
 
 head(ufc[4:5])   # equivalent to ufc[,4:5]
 head(ufc[,4:5])
+# put them in new object
 head(diam.height <- ufc[4:5])
 diam.height[1:5,] # result of selecting columns is df
 is.data.frame(diam.height)
@@ -274,7 +327,7 @@ is.data.frame(diam.height)
 head(x <- ufc[5])
 
 # gives an error, undefined columns:
-(x[1:5])
+(x[1:5]) # x is not a vector
 
 # even though class of ufc is data.frame
 # mode of ufc is a list
