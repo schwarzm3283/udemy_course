@@ -32,7 +32,7 @@
 # at breast height (dbh) in inches and height in feet,
 # for a single tree at a given age.
 
-treeg <- read.csv("c://temp/treegrowth.csv")
+treeg <- read.csv("treegrowth.csv")
 head(treeg)
 str(treeg)
 
@@ -138,13 +138,15 @@ for (i in 1:length(trees)) {
 # and max.height, using sapply:
 
 my.max <- function(x, i) max(x[[i]]) #max of element i of list x
-max.age <- max(sapply(trees, my.max, "age"))
-max.height <- max(sapply(trees, my.max, "height.ft"))
+max.age <- max(sapply(trees.ps, my.max, "age"))
+max.height <- max(sapply(trees.ps, my.max, "height.ft"))
 
 # Plotting is now straightforward:
 
 plot(c(0, max.age), c(0, max.height), type = "n", 
      xlab = "age (years)", ylab = "height (feet)")
-for (i in 1:length(trees)) 
-  lines(trees[[i]]$age, trees[[i]]$height.ft)
+for (i in 1:length(trees.ps)) 
+  lines(trees.ps[[i]]$age, trees.ps[[i]]$height.ft)
+
+tree.lines <- sapply(trees.ps, function(x,l,h) {lines(x[[l]],x[[h]])},l="age", h="height.ft")
 
