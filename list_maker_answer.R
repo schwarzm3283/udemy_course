@@ -23,9 +23,8 @@ vec3 <- sample(1:50, 20)
 
 df.maker <- function(...){
   vec.list <- list(...)
-  len.check <- sapply(vec.list, length)
-  len.measure <- abs(len.check) - mean(len.check)
   ven.length <- length(vec.list)
+  len.check <- sapply(vec.list, length)
   
   vector.maker <- function(len=sample(2:9,1)) {
     for (i in 1:len) {
@@ -45,6 +44,17 @@ df.maker <- function(...){
     }
     return(vec.list)
   }
+  
+  if (ven.length == 0) {
+    len.check <- sample(5:10,1)
+    vec.list <- vector.maker()
+    names <- 1:length(vec.list)
+    df.result <- data.frame(vec.list)
+    colnames(df.result) <- names
+    return(df.result)
+  }
+  else {
+  len.measure <- abs(len.check) - mean(len.check)
   if (len.measure[1] != 0) {
     stop("All vectors must be the same length")
   }
@@ -62,6 +72,7 @@ df.maker <- function(...){
       return(df.result)
     }
   }
+}
 
 
 
